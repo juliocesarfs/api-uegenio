@@ -1,8 +1,11 @@
 package br.ueg.madamestore.application.controller;
 
 
+import br.ueg.madamestore.application.dto.SemesterDTO;
 import br.ueg.madamestore.application.dto.SubjectDTO;
+import br.ueg.madamestore.application.dto.TeacherDTO;
 import br.ueg.madamestore.application.mapper.SubjectMapper;
+import br.ueg.madamestore.application.model.Semester;
 import br.ueg.madamestore.application.model.Subject;
 import br.ueg.madamestore.application.service.SubjectService;
 import io.swagger.annotations.*;
@@ -67,6 +70,23 @@ public class SubjectController extends AbstractController {
         subject.setId(id.longValue());
         Subject subjectSaved = subjectService.salvar(subject);
         return ResponseEntity.ok(subjectMapper.toDTO(subjectSaved));
+    }
+
+    @ApiOperation(value = "Retorna uma lista de semesters cadastrados.", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Success", response = TeacherDTO.class),
+            @ApiResponse(code = 400, message = "Bad Request", response = MessageResponse.class),
+            @ApiResponse(code = 404, message = "Not Found", response = MessageResponse.class)
+    })
+    @GetMapping(path = "/ativos", produces = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<?> getSubjectsAtivos() {
+        List<Subject> subjects = subjectService.getTodos();
+        List<SubjectDTO> subjectsDTO = new ArrayList<>();
+        for (Subject subject : subjects) {
+            SubjectDTO subjectDTO = subjectMapper.toDTO(subject);
+            subjectsDTO.add(subjectDTO);
+        }
+        return ResponseEntity.ok(subjectsDTO);
     }
 
     /**

@@ -17,8 +17,10 @@ public @Data class FiltroClassroomDTO implements Serializable {
     @ApiModelProperty(value = "Id da Classroom")
     private Long idClassroom;
 
-    @ApiModelProperty(value = "disciplina")
-    private String subject;
+    @ApiModelProperty(value = "Valor Total")
+    private String local;
 
+    @ApiModelProperty(value = "Valor Total")
+    private String subject;
 
 }

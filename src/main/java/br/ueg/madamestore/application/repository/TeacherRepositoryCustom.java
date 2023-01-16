@@ -9,10 +9,11 @@
 package br.ueg.madamestore.application.repository;
 
 
-
 import java.util.List;
 
+import br.ueg.madamestore.application.dto.FiltroAmigoDTO;
 import br.ueg.madamestore.application.dto.FiltroTeacherDTO;
+import br.ueg.madamestore.application.model.Amigo;
 import br.ueg.madamestore.application.model.Grupo;
 import br.ueg.madamestore.application.model.Teacher;
 
@@ -24,7 +25,7 @@ import br.ueg.madamestore.application.model.Teacher;
 public interface TeacherRepositoryCustom {
 
     /**
-     * Retorna uma lista de {@link Teacher} conforme o filtro de pesquisa informado.
+     * Retorna uma lista de {@link br.ueg.madamestore.application.model.Teacher} conforme o filtro de pesquisa informado.
      *
      * @param filtroTeacherDTO
      * @return

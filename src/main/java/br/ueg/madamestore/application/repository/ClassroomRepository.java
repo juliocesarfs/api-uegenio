@@ -1,5 +1,7 @@
 package br.ueg.madamestore.application.repository;
 
+import br.ueg.madamestore.application.model.Produto;
+import br.ueg.madamestore.application.model.Usuario;
 import br.ueg.madamestore.application.model.Classroom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -32,9 +34,9 @@ public interface ClassroomRepository extends JpaRepository<Classroom, Long>, Cla
      * @return
      */
     @Query("SELECT classroom from Classroom classroom " +
-            " INNER JOIN FETCH classroom.teachersClassrooms teacher "+
-            "INNER JOIN FETCH classroom.subject subject "
-            //"INNER JOIN FETCH classroom.times times"
+            " INNER JOIN FETCH classroom.teachersClassrooms teacher"+
+            " INNER JOIN FETCH classroom.semester semester" +
+            " INNER JOIN FETCH classroom.subject subject"
     )
     public List<Classroom> getTodos();
 
@@ -46,7 +48,8 @@ public interface ClassroomRepository extends JpaRepository<Classroom, Long>, Cla
      */
     @Query("SELECT classroom from Classroom classroom " +
             " INNER JOIN FETCH classroom.teachersClassrooms teachersClassrooms " +
-            //" INNER JOIN FETCH classroom.times times"+
+            " INNER JOIN FETCH classroom.semester semester"+
+            " INNER JOIN FETCH classroom.subject subject"+
             " WHERE classroom.id = :idClassroom ")
     public Optional<Classroom> findByIdFetch( @Param("idClassroom") final Long idClassroom);
 

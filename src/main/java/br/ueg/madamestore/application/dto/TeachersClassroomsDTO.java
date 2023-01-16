@@ -26,17 +26,20 @@ import java.io.Serializable;
  */
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@ApiModel(value = "Entidade de transferência de Teacher classroom")
-public @Data class TeacherClassroomDTO implements Serializable {
+@ApiModel(value = "Entidade de transferência de Usuario Grupos")
+public @Data class TeachersClassroomsDTO implements Serializable {
 
-    @ApiModelProperty(value = "Código do Teacher Classroom")
+    @ApiModelProperty(value = "Código do teachers classrooms")
     private String id;
 
-    @ApiModelProperty(value = "Código da aula")
+    @ApiModelProperty(value = "Código do classroom")
     private String idClassroom;
 
     @ApiModelProperty(value = "Código do teacher")
-    private Long idTeacher;
+    private String idTeacher;
+
+    @ApiModelProperty(value = "Nome do teacher")
+    private String nomeTeacher;
 
 
     /**

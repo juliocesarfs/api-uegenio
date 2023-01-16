@@ -10,17 +10,23 @@ package br.ueg.madamestore.application.controller;
 
 import br.ueg.madamestore.api.util.Validation;
 import br.ueg.madamestore.application.dto.*;
+import br.ueg.madamestore.application.enums.StatusAtivoInativo;
 import br.ueg.madamestore.application.enums.StatusEspera;
+import br.ueg.madamestore.application.enums.StatusSimNao;
 import br.ueg.madamestore.application.enums.StatusVendido;
 import br.ueg.madamestore.application.mapper.EsperaMapper;
+import br.ueg.madamestore.application.mapper.UsuarioMapper;
 import br.ueg.madamestore.application.mapper.ClassroomMapper;
-import br.ueg.madamestore.application.mapper.TeacherClassroomMapper;
 import br.ueg.madamestore.application.mapper.VendidoMapper;
-import br.ueg.madamestore.application.model.*;
-import br.ueg.madamestore.application.repository.TeacherRepository;
-import br.ueg.madamestore.application.service.*;
+import br.ueg.madamestore.application.model.Amigo;
+import br.ueg.madamestore.application.model.Teacher;
+import br.ueg.madamestore.application.model.Usuario;
+import br.ueg.madamestore.application.model.Classroom;
+import br.ueg.madamestore.application.service.UsuarioService;
+import br.ueg.madamestore.application.service.ClassroomService;
 import br.ueg.madamestore.comum.exception.MessageResponse;
 import io.swagger.annotations.*;
+import net.bytebuddy.implementation.bind.MethodDelegationBinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +35,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Classe de controle referente a entidade {@link Classroom}.
@@ -47,30 +54,6 @@ public class ClassroomController extends AbstractController {
     @Autowired
     private ClassroomMapper classroomMapper;
 
-    @Autowired
-    private TeacherClassroomMapper teacherClassroomMapper;
-
-    @Autowired
-    private EsperaMapper esperaMapper;
-
-    @Autowired
-    private VendidoMapper vendidoMapper;
-
-    @Autowired
-    private TeacherClassroomService teacherClassroomService;
-
-    @Autowired
-    private TeacherService teacherService;
-
-    @Autowired
-    private SemesterService semesterService;
-
-    @Autowired
-    private SubjectService subjectService;
-
-
-
-
     /**
      * Salva uma instância de {@link Classroom} na base de dados.
      *
@@ -85,60 +68,18 @@ public class ClassroomController extends AbstractController {
     })
     @PostMapping(path = "/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> incluir(@ApiParam(value = "Informações da Classroom", required = true) @Valid @RequestBody ClassroomDTO classroomDTO) {
+        Classroom classroom=classroomMapper.toEntity(classroomDTO);
 
 
-
-        System.out.println("SEEEEXOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO ======================");
+        System.out.println("=================================================asdasdasdasddasd");
         System.out.println(classroomDTO);
-
-
-
-
-        Set<TeacherClassroom> teacherClassrooms = new HashSet<>();
-        for (Object idT: classroomDTO.getIdTeacher()) {
-
-            Number idtLong = (Number) idT;
-            System.out.println(idtLong);
-            Teacher teacher = teacherService.getById(idtLong.longValue());
-
-            TeacherClassroom teacherClassroom = new TeacherClassroom();
-
-            teacherClassroom.setTeacher(teacher);
-
-            teacherClassrooms.add(teacherClassroomService.salvar(teacherClassroom));
-
-            System.out.println(teacherClassrooms);
-        }
-
-        Subject subject = subjectService.getById(classroomDTO.getIdSubject());
-        Semester semester = semesterService.getById(classroomDTO.getIdSemester());
-
-        Classroom classroom = new Classroom();
-
-        classroom.setLocal(classroomDTO.getLocal());
-        classroom.setSemester(semester);
-        classroom.setSubject(subject);
-        classroom.setTeachersClassrooms(teacherClassrooms);
+        System.out.println("=================================================asdasdasdasddasd");
         System.out.println(classroom);
+        //classroomService.configurarClassroomTeacher(classroom);
 
-        classroomService.salvar(classroom);
-
-        for(TeacherClassroom tc: teacherClassrooms) {
-            tc.setClassroom(classroom);
-
-            teacherClassroomService.salvar(tc);
-        }
-
-
-
-
+        classroom = classroomService.salvar(classroom);
+        classroomDTO = classroomMapper.toDTO(classroom);
         return ResponseEntity.ok(classroomDTO);
-
-        //classroomService.configurarClassroomProduto(classroom);
-
-        //classroom = classroomService.salvar(classroom);
-        //classroomDTO = classroomMapper.toDTO(classroom);
-        //return ResponseEntity.ok(classroomDTO);
     }
 
     /**
@@ -157,6 +98,7 @@ public class ClassroomController extends AbstractController {
     public ResponseEntity<?> alterar(@ApiParam(value = "Código do Usuário", required = true) @PathVariable final BigDecimal id, @ApiParam(value = "Informações de classroom", required = true) @Valid @RequestBody ClassroomDTO classroomDTO) {
         Validation.max("id", id, 99999999L);
         Classroom classroom = classroomMapper.toEntity(classroomDTO);
+        classroomService.configurarClassroomTeacher(classroom);
         classroom.setId(id.longValue());
         //classroomService.retiraClassroomAlterarQuantidade(classroom);
         //classroomService.diminuirQuantidadeVendida(classroom);
@@ -202,9 +144,10 @@ public class ClassroomController extends AbstractController {
             @ApiResponse(code = 400, message = "Bad Request", response = MessageResponse.class)
     })
     @PutMapping(path = "/alterar/{id:[\\d]+}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public  ResponseEntity<?> alterarProduto(@ApiParam(value = "Código do Usuário", required = true) @PathVariable final BigDecimal id, @ApiParam(value = "Informações de classroom", required = true) @Valid @RequestBody ClassroomDTO classroomDTO) {
+    public  ResponseEntity<?> alterarTeacher(@ApiParam(value = "Código do Usuário", required = true) @PathVariable final BigDecimal id, @ApiParam(value = "Informações de classroom", required = true) @Valid @RequestBody ClassroomDTO classroomDTO) {
         Validation.max("id", id, 99999999L);
         Classroom classroom = classroomMapper.toEntity(classroomDTO);
+        classroomService.configurarClassroomTeacher(classroom);
         classroom.setId(id.longValue());
         return ResponseEntity.ok(classroomDTO);
     }
@@ -226,8 +169,10 @@ public class ClassroomController extends AbstractController {
     @GetMapping(path = "/filtro-ativo", produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<?> getClassroomAtivosByFiltro(@ApiParam(value = "Filtro de pesquisa", required = true) @Valid @ModelAttribute("filtroDTO") FiltroClassroomDTO filtroDTO) {
 
+        System.out.println("=============================================");
+        System.out.println(filtroDTO);
         List<ClassroomDTO> classroomsDTO = new ArrayList<>();
-        List<Classroom> classrooms = classroomService.getClassroomsByFiltro(filtroDTO);
+        List<Classroom> classrooms = classroomService.getClassroomByFiltro(filtroDTO);
         if(classrooms != null){
             for (Classroom classroom: classrooms) {
                 classroomsDTO.add(classroomMapper.toDTO(classroom));
@@ -252,7 +197,34 @@ public class ClassroomController extends AbstractController {
     })
     @GetMapping(path = "/filtro", produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<?> getClassroomByFiltro(@ApiParam(value = "Filtro de pesquisa", required = true) @Valid @ModelAttribute("filtroDTO") final FiltroClassroomDTO filtroDTO) {
-        List<Classroom> classrooms = classroomService.getClassroomsByFiltro(filtroDTO);
+        System.out.println("=============================================asdasdasdasdasdasdasdasdasdasdasd");
+        System.out.println(filtroDTO);
+
+        List<Classroom> classrooms = classroomService.getClassroomByFiltro(filtroDTO);
+
+
+        List<ClassroomDTO> classroomsDTO = new ArrayList<>();
+        if(classrooms.size() > 0){
+            for (Classroom g:
+
+                    classrooms) {
+                ClassroomDTO classroomDTO = classroomMapper.toDTO(g);
+                classroomsDTO.add(classroomDTO);
+            }
+        }
+
+        return ResponseEntity.ok(classroomsDTO);
+    }
+
+    @ApiOperation(value = "Recupera os classrooms pelo Filtro Informado.", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Success", response = ClassroomDTO.class),
+            @ApiResponse(code = 400, message = "Bad Request", response = MessageResponse.class),
+            @ApiResponse(code = 404, message = "Not Found", response = MessageResponse.class)
+    })
+    @GetMapping(path = "/all", produces = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<?> getAll() {
+        List<Classroom> classrooms = classroomService.getClassrooms();
         List<ClassroomDTO> classroomsDTO = new ArrayList<>();
         if(classrooms.size() > 0){
             for (Classroom g:
@@ -267,9 +239,21 @@ public class ClassroomController extends AbstractController {
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     @ApiOperation(value = "Remove uma classroom pelo id informado.", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Success", response = ProdutoDTO.class),
+            @ApiResponse(code = 200, message = "Success", response = TeacherDTO.class),
             @ApiResponse(code = 400, message = "Bad Request", response = MessageResponse.class),
             @ApiResponse(code = 404, message = "Not Found", response = MessageResponse.class)
     })
@@ -282,6 +266,8 @@ public class ClassroomController extends AbstractController {
         return ResponseEntity.ok(classroomMapper.toDTO(classroom));
     }
 
+
+
     @ApiOperation(value = "Inclui um novo Usuário na base de dados.", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponses({
             @ApiResponse(code = 200, message = "Success", response = ClassroomDTO.class),
@@ -291,12 +277,15 @@ public class ClassroomController extends AbstractController {
     @PostMapping(path = "/incluir", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> incluirClassroom(@ApiParam(value = "Informações da Classroom", required = true) @Valid @RequestBody ClassroomDTO classroomDTO) {
 
+
         Classroom classroom=classroomMapper.toEntity(classroomDTO);
 
-        //classroomService.configurarClassroomProduto(classroom);
+
+        //classroomService.configurarClassroomTeacher(classroom);
 
         classroom = classroomService.salvar(classroom);
         classroomDTO = classroomMapper.toDTO(classroom);
         return ResponseEntity.ok(classroomDTO);
     }
+
 }

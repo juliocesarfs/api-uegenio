@@ -35,6 +35,6 @@ class Time {
 
     @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_CLASSROOM", referencedColumnName = "id", nullable = true)
+    @JoinColumn(name = "ID_CLASSROOM", referencedColumnName = "ID_CLASSROOM", nullable = true)
     private Classroom classroom;
 }

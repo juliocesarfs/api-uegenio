@@ -32,7 +32,7 @@ class Holiday {
     private Date finalDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_SEMESTER", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "ID_SEMESTER", referencedColumnName = "id", nullable = true)
     @ToStringExclude
     private Semester semester;
 

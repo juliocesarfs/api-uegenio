@@ -1,8 +1,6 @@
 package br.ueg.madamestore.application.dto;
 
-import br.ueg.madamestore.application.model.Semester;
-import br.ueg.madamestore.application.model.Subject;
-import br.ueg.madamestore.application.model.TeacherClassroom;
+import br.ueg.madamestore.application.model.TeachersClassrooms;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
@@ -23,26 +21,25 @@ class ClassroomDTO implements Serializable {
     @ApiModelProperty(value = "id da Classroom")
     private Long id;
 
-    @ApiModelProperty(value = "teachersClassrooms")
-    private List teachersClassrooms;
+    @ApiModelProperty(value = "nome do Teacher")
+    private List<TeacherDTO> teacher;
 
     @ApiModelProperty(value = "teachersClassrooms")
-    private List idTeacher;
+    private List<TeachersClassroomsDTO> teachersClassrooms;
 
-    @ApiModelProperty(value = "local da aula")
-    private String local;
-
-    /*
-    @ApiModelProperty(value = "horarios da aula")
-    private List<TimeDTO> times;
-*/
-    @ApiModelProperty(value = "Id da disciplina")
-    private Long idSubject;
-
-    @ApiModelProperty(value = "Id do semestre")
+    @ApiModelProperty(value = "Id do Semester")
     private Long idSemester;
 
-    @ApiModelProperty(value = "Nome da disciplina")
+    @ApiModelProperty(value = "nome do cliente")
+    private String nomeSemester;
+
+    @ApiModelProperty(value = "nome do cliente")
+    private String local;
+
+    @ApiModelProperty(value = "Id do Semester")
+    private Long idSubject;
+
+    @ApiModelProperty(value = "nome do cliente")
     private String nomeSubject;
 
 }

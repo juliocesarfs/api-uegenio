@@ -2,8 +2,10 @@ package br.ueg.madamestore.application.controller;
 
 
 import br.ueg.madamestore.application.dto.SemesterDTO;
+import br.ueg.madamestore.application.dto.TeacherDTO;
 import br.ueg.madamestore.application.mapper.SemesterMapper;
 import br.ueg.madamestore.application.model.Semester;
+import br.ueg.madamestore.application.model.Teacher;
 import br.ueg.madamestore.application.service.SemesterService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,6 +135,23 @@ public class SemesterController extends AbstractController {
         List<Semester> semesters = semesterService.getTodos();
         List<SemesterDTO> semestersDTO = new ArrayList<>();
         for (Semester semester : semesters) {
+            SemesterDTO semesterDTO = semesterMapper.toDTO(semester);
+            semestersDTO.add(semesterDTO);
+        }
+        return ResponseEntity.ok(semestersDTO);
+    }
+
+    @ApiOperation(value = "Retorna uma lista de semesters cadastrados.", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Success", response = TeacherDTO.class),
+            @ApiResponse(code = 400, message = "Bad Request", response = MessageResponse.class),
+            @ApiResponse(code = 404, message = "Not Found", response = MessageResponse.class)
+    })
+    @GetMapping(path = "/ativos", produces = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<?> getSemestersAtivos() {
+        List<Semester> teachers = semesterService.getTodos();
+        List<SemesterDTO> semestersDTO = new ArrayList<>();
+        for (Semester semester : teachers) {
             SemesterDTO semesterDTO = semesterMapper.toDTO(semester);
             semestersDTO.add(semesterDTO);
         }

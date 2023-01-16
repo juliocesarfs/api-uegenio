@@ -6,24 +6,23 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.*;
 
 import br.ueg.madamestore.application.configuration.Constante;
+import br.ueg.madamestore.application.enums.StatusSimNao;
+import br.ueg.madamestore.application.enums.converter.StatusSimNaoConverter;
 
-import java.util.Set;
+import java.time.LocalDate;
 
 @Entity
-@Table(name = "teachers", schema = Constante.DATABASE_OWNER)
+@Table(name = "TBL_TEACHER", schema = Constante.DATABASE_OWNER)
 @EqualsAndHashCode()
-@SequenceGenerator(name = "TBL_S_TEACHERS", sequenceName = "TBL_S_TEACHERS", allocationSize = 1, schema = Constante.DATABASE_OWNER)
+@SequenceGenerator(name = "TBL_S_TEACHER", sequenceName = "TBL_S_TEACHER", allocationSize = 1, schema = Constante.DATABASE_OWNER)
 public @Data
 class Teacher {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TBL_S_TEACHERS")
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TBL_S_TEACHER")
+    @Column(name = "ID_TEACHER", nullable = false)
     private Long id;
 
-    @Column(name = "name", length = 100, nullable = false)
+    @Column(name = "NOME_TEACHER", length = 100, nullable = false)
     private String nome;
-
-    @Column(name = "email", length = 100, nullable = false)
-    private String email;
 
 }

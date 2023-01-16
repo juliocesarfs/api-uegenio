@@ -1,15 +1,18 @@
 package br.ueg.madamestore.application.service;
 
-
-import br.ueg.madamestore.application.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.ueg.madamestore.application.dto.FiltroAmigoDTO;
 import br.ueg.madamestore.application.dto.FiltroTeacherDTO;
+import br.ueg.madamestore.application.enums.StatusSimNao;
 import br.ueg.madamestore.application.exception.SistemaMessageCode;
+import br.ueg.madamestore.application.model.Amigo;
 import br.ueg.madamestore.application.model.Teacher;
+import br.ueg.madamestore.application.repository.AmigoRepository;
+import br.ueg.madamestore.application.repository.TeacherRepository;
 import br.ueg.madamestore.comum.exception.BusinessException;
 import br.ueg.madamestore.comum.util.CollectionUtil;
 import br.ueg.madamestore.comum.util.Util;
@@ -23,7 +26,7 @@ import java.util.Optional;
 public class TeacherService {
 
     @Autowired
-    private TeacherRepository teacherRepository;
+    private TeacherRepository teachersRepository;
 
     /**
      * Retorna uma lista de {@link Teacher} conforme o filtro de pesquisa informado.
@@ -34,18 +37,18 @@ public class TeacherService {
     public List<Teacher> getTeachersByFiltro(final FiltroTeacherDTO filtroDTO) {
         validarCamposObrigatoriosFiltro(filtroDTO);
 
-        List<Teacher> grupos = teacherRepository.findAllByFiltro(filtroDTO);
+        List<Teacher> teachers = teachersRepository.findAllByFiltro(filtroDTO);
 
-        if (CollectionUtil.isEmpty(grupos)) {
+        if (CollectionUtil.isEmpty(teachers)) {
             throw new BusinessException(SistemaMessageCode.ERRO_NENHUM_REGISTRO_ENCONTRADO_FILTROS);
         }
 
-        return grupos;
+        return teachers;
     }
 
     /**
      * Verifica se pelo menos um campo de pesquisa foi informado, e se informado o
-     * nome do Grupo, verifica se tem pelo meno 4 caracteres.
+     * nome do Teacher
      *
      * @param filtroDTO
      */
@@ -67,7 +70,7 @@ public class TeacherService {
      * @return
      */
     public List<Teacher> getTodos() {
-        List<Teacher> teachers = teacherRepository.findAll();
+        List<Teacher> teachers = teachersRepository.getTodos() ;
 
         if (CollectionUtil.isEmpty(teachers)) {
             throw new BusinessException(SistemaMessageCode.ERRO_NENHUM_REGISTRO_ENCONTRADO);
@@ -77,11 +80,11 @@ public class TeacherService {
 
     /**
      * Retorno um a {@link Teacher} pelo Id informado.
-     * @param id - id to tipo Produto
+     * @param id - id to Teacher
      * @return
      */
     public Teacher getById(Long id){
-        Optional<Teacher> teacherOptional = teacherRepository.findById(id);
+        Optional<Teacher> teacherOptional = teachersRepository.findByIdFetch(id);
 
         if(!teacherOptional.isPresent()){
             throw new BusinessException(SistemaMessageCode.ERRO_NENHUM_REGISTRO_ENCONTRADO);
@@ -97,17 +100,22 @@ public class TeacherService {
      * @return
      */
     public Teacher salvar(Teacher teacher) {
+
+
+
         validarCamposObrigatorios(teacher);
         validarDuplicidade(teacher);
 
-        Teacher grupoSaved = teacherRepository.save(teacher);
-        return grupoSaved;
+        teachersRepository.save(teacher);
+
+        Teacher teacherSaved = this.getById(teacher.getId());
+        return teacherSaved;
     }
 
     public Teacher remover(Long id){
         Teacher teacher = this.getById(id);
 
-        teacherRepository.delete(teacher);
+        teachersRepository.delete(teacher);
 
         return teacher;
     }
@@ -126,22 +134,24 @@ public class TeacherService {
             vazio = Boolean.TRUE;
         }
 
+
         if (vazio) {
             throw new BusinessException(SistemaMessageCode.ERRO_CAMPOS_OBRIGATORIOS);
         }
     }
 
     /**
-     * Verifica se o Teacher a ser salvo já existe na base de dados.
+     * Verifica se o TipoTeacher a ser salvo já existe na base de dados.
      *
      * @param teacher
      */
     private void validarDuplicidade(final Teacher teacher) {
-        Long count = teacherRepository.countByNomeAndNotId(teacher.getNome(), teacher.getId());
+        Long count = teachersRepository.countByNomeAndNotId(teacher.getNome(), teacher.getId());
 
         if (count > BigDecimal.ZERO.longValue()) {
-            throw new BusinessException(SistemaMessageCode.ERRO_TIPO_AMIGO_DUPLICADO);
+            throw new BusinessException(SistemaMessageCode.ERRO_AMIGO_DUPLICADO);
         }
     }
+
 
 }
