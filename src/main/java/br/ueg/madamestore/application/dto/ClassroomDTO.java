@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.jfree.data.time.Hour;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -27,6 +28,9 @@ class ClassroomDTO implements Serializable {
     @ApiModelProperty(value = "teachersClassrooms")
     private List<TeachersClassroomsDTO> teachersClassrooms;
 
+    @ApiModelProperty(value = "nome do Teacher")
+    private List<HourDTO> hours;
+
     @ApiModelProperty(value = "Id do Semester")
     private Long idSemester;
 
@@ -41,5 +45,7 @@ class ClassroomDTO implements Serializable {
 
     @ApiModelProperty(value = "nome do cliente")
     private String nomeSubject;
+
+
 
 }

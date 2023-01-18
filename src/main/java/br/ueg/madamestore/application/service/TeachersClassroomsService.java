@@ -1,6 +1,6 @@
 package br.ueg.madamestore.application.service;
 
-import br.ueg.madamestore.application.model.Produto;
+import br.ueg.madamestore.application.model.Teacher;
 import br.ueg.madamestore.application.repository.TeachersClassroomsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ public class TeachersClassroomsService {
      * @param classroomId
      * @return
      */
-    public List<Produto> getItensClassroom(Long classroomId){
+    public List<Teacher> getItensClassroom(Long classroomId){
         return teachersClassroomsRepository.findByIdClassroom(classroomId);
     }
 

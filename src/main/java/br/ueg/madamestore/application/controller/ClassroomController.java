@@ -198,6 +198,7 @@ public class ClassroomController extends AbstractController {
     @GetMapping(path = "/filtro", produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<?> getClassroomByFiltro(@ApiParam(value = "Filtro de pesquisa", required = true) @Valid @ModelAttribute("filtroDTO") final FiltroClassroomDTO filtroDTO) {
         System.out.println("=============================================asdasdasdasdasdasdasdasdasdasdasd");
+
         System.out.println(filtroDTO);
 
         List<Classroom> classrooms = classroomService.getClassroomByFiltro(filtroDTO);
@@ -213,7 +214,10 @@ public class ClassroomController extends AbstractController {
             }
         }
 
+
+
         return ResponseEntity.ok(classroomsDTO);
+
     }
 
     @ApiOperation(value = "Recupera os classrooms pelo Filtro Informado.", produces = MediaType.APPLICATION_JSON_VALUE)

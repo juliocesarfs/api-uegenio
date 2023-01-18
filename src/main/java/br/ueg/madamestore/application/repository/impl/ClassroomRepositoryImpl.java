@@ -29,6 +29,7 @@ public class ClassroomRepositoryImpl implements ClassroomRepositoryCustom {
         StringBuilder jpql = new StringBuilder();
         jpql.append(" SELECT DISTINCT classroom FROM Classroom classroom");
         jpql.append(" INNER JOIN FETCH classroom.teachersClassrooms teachersClassrooms");
+        jpql.append(" INNER JOIN FETCH classroom.hours hours");
         jpql.append(" INNER JOIN FETCH classroom.semester semester");
         jpql.append(" INNER JOIN FETCH classroom.subject subject");
         jpql.append(" WHERE 1=1 ");
@@ -40,16 +41,24 @@ public class ClassroomRepositoryImpl implements ClassroomRepositoryCustom {
         }
 
         if (filtroClassroomDTO.getSubject()!=null) {
-            jpql.append(" AND classroom.subject LIKE '%' || :subject || '%' ");
+            jpql.append(" AND UPPER(subject.nome) LIKE UPPER('%' || :subject || '%') ");
             parametros.put("subject", filtroClassroomDTO.getSubject());
         }
 
         if (filtroClassroomDTO.getLocal()!=null) {
-            jpql.append(" AND classroom.local LIKE '%' || :local || '%' ");
+            jpql.append(" AND UPPER(classroom.local) LIKE UPPER('%' || :local || '%') ");
             parametros.put("local", filtroClassroomDTO.getLocal());
         }
 
+        if (filtroClassroomDTO.getTeacher()!=null) {
+            jpql.append(" AND teachersClassrooms.teacher.nome LIKE '%' || :teacher || '%' ");
+            parametros.put("teacher", filtroClassroomDTO.getTeacher());
+        }
 
+        if (filtroClassroomDTO.getWeekDay()!=null) {
+            jpql.append(" AND UPPER(hours.weekDay) LIKE UPPER('%' || :weekDay || '%') ");
+            parametros.put("weekDay", filtroClassroomDTO.getWeekDay());
+        }
 
 
 

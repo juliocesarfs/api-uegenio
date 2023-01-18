@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  * @author UEG
  */
-@Mapper(componentModel = "spring", uses = { TeacherMapper.class, TeachersClassroomsMapper.class})
+@Mapper(componentModel = "spring", uses = { TeacherMapper.class, TeachersClassroomsMapper.class, HourMapper.class, SubjectMapper.class })
 public interface ClassroomMapper {
 
     /**
@@ -42,6 +42,7 @@ public interface ClassroomMapper {
      */
     @Mapping(source = "classroomDTO.idSemester", target = "semester.id")
     @Mapping(source = "classroomDTO.idSubject", target = "subject.id")
+    @Mapping(source = "classroomDTO.nomeSubject", target = "subject.nome")
     public Classroom toEntity(ClassroomDTO classroomDTO);
 
 

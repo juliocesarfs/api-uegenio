@@ -1,19 +1,11 @@
 package br.ueg.madamestore.application.model;
 
 import br.ueg.madamestore.application.configuration.Constante;
-import br.ueg.madamestore.application.enums.StatusEspera;
-import br.ueg.madamestore.application.enums.StatusSimNao;
-import br.ueg.madamestore.application.enums.StatusVendido;
-import br.ueg.madamestore.application.enums.converter.StatusEsperaConverter;
-import br.ueg.madamestore.application.enums.converter.StatusSimNaoConverter;
-import br.ueg.madamestore.application.enums.converter.StatusVendidoConverter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
-import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -31,12 +23,12 @@ class Classroom {
 
     @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ID_SEMESTER", referencedColumnName = "id")
+    @JoinColumn(name = "ID_SEMESTER", referencedColumnName = "id", nullable = false)
     private Semester semester;
 
     @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ID_SUBJECT", referencedColumnName = "id")
+    @JoinColumn(name = "ID_SUBJECT", referencedColumnName = "id", nullable = false)
     private Subject subject;
 
 
@@ -44,8 +36,14 @@ class Classroom {
     @OneToMany(mappedBy = "classroom", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TeachersClassrooms> teachersClassrooms;
 
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "classroom", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<StudentsClassrooms> studentsClassrooms;
+
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "classroom", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Hour> hours;
+
     @Column(name="LOCAL", nullable = false)
     private String local;
-
-
 }

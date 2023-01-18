@@ -1,7 +1,7 @@
 package br.ueg.madamestore.application.repository;
 
 import br.ueg.madamestore.application.model.TeachersClassrooms;
-import br.ueg.madamestore.application.model.Produto;
+import br.ueg.madamestore.application.model.Teacher;
 import br.ueg.madamestore.application.model.Classroom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,6 +18,8 @@ public interface TeachersClassroomsRepository extends JpaRepository<TeachersClas
             "LEFT JOIN ug.classroom u " +
             "LEFT JOIN ug.teacher g " +
             "where ug.classroom.id=:idClassroom")
-    List<Produto> findByIdClassroom(Long idClassroom);
+    List<Teacher> findByIdClassroom(Long idClassroom);
+
+
 }
 

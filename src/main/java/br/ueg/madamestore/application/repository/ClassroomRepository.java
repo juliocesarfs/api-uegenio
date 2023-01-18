@@ -1,6 +1,7 @@
 package br.ueg.madamestore.application.repository;
 
 import br.ueg.madamestore.application.model.Produto;
+import br.ueg.madamestore.application.model.Student;
 import br.ueg.madamestore.application.model.Usuario;
 import br.ueg.madamestore.application.model.Classroom;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -52,6 +53,18 @@ public interface ClassroomRepository extends JpaRepository<Classroom, Long>, Cla
             " INNER JOIN FETCH classroom.subject subject"+
             " WHERE classroom.id = :idClassroom ")
     public Optional<Classroom> findByIdFetch( @Param("idClassroom") final Long idClassroom);
+
+    @Query("SELECT classroom from Classroom classroom " +
+            " INNER JOIN classroom.subject subject "+
+            " ON UPPER(subject.nome) LIKE UPPER('%' || :nomeSubject || '%') ")
+    public Optional<Classroom> findBySubjectName( @Param("nomeSubject") String nomeSubject);
+
+
+    @Query("select distinct g from StudentsClassrooms ug " +
+            "LEFT JOIN ug.classroom u " +
+            "LEFT JOIN ug.student g " +
+            "where ug.classroom.id=:idClassroom")
+    List<Student> findByIdClassroom(Long idClassroom);
 
 
 }

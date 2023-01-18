@@ -132,6 +132,13 @@ public class ClassroomService {
 
     }
 
+    public void configurarStudentClassroom(Classroom classroom) {
+        for (TeachersClassrooms teachersClassrooms : classroom.getTeachersClassrooms()){
+            teachersClassrooms.setClassroom(classroom);
+        }
+
+    }
+
 
 
     /**
@@ -190,6 +197,7 @@ public class ClassroomService {
         configurarClassroomTeacher(classroom);
         buscarTeacher(classroom);
         buscarSemester(classroom);
+        buscarSubject(classroom);
         classroomRepository.delete(classroom);
 
 
@@ -208,7 +216,15 @@ public class ClassroomService {
         boolean vazio = Boolean.TRUE;
 
 
-        if (filtroDTO.getLocal()!=null) {
+        if (filtroDTO.getSubject()!=null) {
+            vazio = Boolean.FALSE;
+        }
+
+        if (filtroDTO.getTeacher()!=null) {
+            vazio = Boolean.FALSE;
+        }
+
+        if (filtroDTO.getWeekDay()!=null) {
             vazio = Boolean.FALSE;
         }
 
@@ -252,6 +268,10 @@ public class ClassroomService {
      */
     public Classroom getById(final Long id) {
         return classroomRepository.findById(id).orElse(null);
+    }
+
+    public Classroom getBySubjectName(String nomeSubject) {
+        return classroomRepository.findBySubjectName(nomeSubject).orElse(null);
     }
 
     public List<Classroom> getClassrooms() { return classroomRepository.getTodos(); }
