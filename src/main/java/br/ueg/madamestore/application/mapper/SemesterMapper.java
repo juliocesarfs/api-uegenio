@@ -5,6 +5,7 @@ import br.ueg.madamestore.application.dto.SemesterDTO;
 import br.ueg.madamestore.application.model.Modulo;
 import br.ueg.madamestore.application.model.Semester;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 /**
  * Classe adapter referente a entidade {@link Modulo}.
@@ -28,5 +29,6 @@ public interface SemesterMapper {
      * @param semesterDTO
      * @return
      */
+
     public Semester toEntity(SemesterDTO semesterDTO);
 }

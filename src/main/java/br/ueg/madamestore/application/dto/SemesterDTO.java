@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import java.io.Serializable;
-import java.sql.Date;
 import java.time.Year;
+import java.util.Date;
 
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)

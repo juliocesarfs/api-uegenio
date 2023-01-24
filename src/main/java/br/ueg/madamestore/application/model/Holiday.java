@@ -12,7 +12,7 @@ import java.sql.Date;
 
 
 @Entity
-@Table(name = "holidays", schema = Constante.DATABASE_OWNER)
+@Table(name = "TBL_HOLIDAY", schema = Constante.DATABASE_OWNER)
 @EqualsAndHashCode()
 @SequenceGenerator(name = "TBL_S_HOLIDAYS", sequenceName = "TBL_S_HOLIDAYS", allocationSize = 1, schema = Constante.DATABASE_OWNER)
 public @Data
@@ -30,10 +30,5 @@ class Holiday {
 
     @Column(name = "DATA_FINAL",nullable = false)
     private Date finalDate;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_SEMESTER", referencedColumnName = "id", nullable = true)
-    @ToStringExclude
-    private Semester semester;
 
 }

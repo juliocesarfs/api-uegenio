@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import br.ueg.madamestore.application.model.Semester;
 import br.ueg.madamestore.application.model.Usuario;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +32,8 @@ public interface SemesterRepository extends JpaRepository<Semester, Long>, Semes
             " WHERE lower(semester.nome) LIKE lower(:nome)" +
             " AND (:idSemester IS NULL OR semester.id != :idSemester)")
     public Long countByNomeAndNotId(String nome, Long idSemester);
+
+
 
     /**
      * Listar todos os Semesters

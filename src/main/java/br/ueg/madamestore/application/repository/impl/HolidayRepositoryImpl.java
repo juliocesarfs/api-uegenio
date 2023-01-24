@@ -32,6 +32,12 @@ public class HolidayRepositoryImpl implements HolidayRepositoryCustom {
             parametros.put("nome", filtroHolidayDTO.getNome());
         }
 
+        if (filtroHolidayDTO.getDate()!=null) {
+            jpql.append(" AND holiday.initDate <= :date ");
+            jpql.append(" AND holiday.finalDate >= :date ");
+            parametros.put("date", filtroHolidayDTO.getDate());
+        }
+
         TypedQuery<Holiday> query = entityManager.createQuery(jpql.toString(), Holiday.class);
         parametros.entrySet().forEach(parametro -> query.setParameter(parametro.getKey(), parametro.getValue()));
         return query.getResultList();

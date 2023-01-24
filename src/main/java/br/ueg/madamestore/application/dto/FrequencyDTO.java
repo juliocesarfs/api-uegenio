@@ -13,23 +13,20 @@ import java.sql.Date;
 
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@ApiModel(value = "Entidade de transferência de Holiday")
+@ApiModel(value = "Entidade de transferência de Frequency")
 public @Data
-class HolidayDTO implements Serializable {
-
-    @ApiModelProperty(value = "id da feriado")
-    private Long id;
+class FrequencyDTO implements Serializable {
 
     @ApiModelProperty(value = "Nome da feriado")
-    private String nome;
+    private Long idStudent;
 
-    @ApiModelProperty(value = "Data inicio")
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private Date initDate;
+    @ApiModelProperty(value = "Nome da feriado")
+    private String subject;
 
-    @ApiModelProperty(value = "Data final")
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private Date finalDate;
+    @ApiModelProperty(value = "Nome da feriado")
+    private Integer faltas;
 
+    @ApiModelProperty(value = "Nome da feriado")
+    private String situation;
 
 }

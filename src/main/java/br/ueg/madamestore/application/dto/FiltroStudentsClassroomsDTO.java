@@ -15,19 +15,10 @@ import java.util.Date;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @ApiModel(value = "Dados do filtro de pesquisa de Classroom")
-public @Data class FiltroClassroomDTO implements Serializable {
+public @Data class FiltroStudentsClassroomsDTO implements Serializable {
 
     @ApiModelProperty(value = "Id da Classroom")
-    private Long idClassroom;
-
-    @ApiModelProperty(value = "Valor Total")
-    private String local;
-
-    @ApiModelProperty(value = "Valor Total")
-    private String subject;
-
-    @ApiModelProperty(value = "Valor Total")
-    private String teacher;
+    private Long idStudent;
 
     @ApiModelProperty(value = "Valor Total")
     private String weekDay;

@@ -56,6 +56,10 @@ public class SemesterService {
             vazio = Boolean.FALSE;
         }
 
+        if (filtroDTO.getDate()!=null) {
+            vazio = Boolean.FALSE;
+        }
+
         if (vazio) {
             throw new BusinessException(SistemaMessageCode.ERRO_FILTRO_INFORMAR_OUTRO);
         }
@@ -138,6 +142,7 @@ public class SemesterService {
      */
     private void validarDuplicidade(final Semester semester) {
         Long count = semesterRepository.countByNomeAndNotId(semester.getNome(), semester.getId());
+
 
         if (count > BigDecimal.ZERO.longValue()) {
             throw new BusinessException(SistemaMessageCode.ERRO_TIPO_AMIGO_DUPLICADO);

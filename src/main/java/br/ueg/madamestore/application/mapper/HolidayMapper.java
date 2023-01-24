@@ -5,6 +5,7 @@ import br.ueg.madamestore.application.dto.HolidayDTO;
 import br.ueg.madamestore.application.model.Modulo;
 import br.ueg.madamestore.application.model.Holiday;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 /**
  * Classe adapter referente a entidade {@link Modulo}.
@@ -28,5 +29,6 @@ public interface HolidayMapper {
      * @param holidayDTO
      * @return
      */
+
     public Holiday toEntity(HolidayDTO holidayDTO);
 }

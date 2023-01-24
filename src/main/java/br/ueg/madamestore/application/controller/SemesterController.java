@@ -21,6 +21,7 @@ import br.ueg.madamestore.comum.exception.MessageResponse;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,6 +107,8 @@ public class SemesterController extends AbstractController {
     @GetMapping(path = "/filtro", produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<?> getAllByFiltro(@ApiParam(value = "Filtro de pesquisa", required = true) @ModelAttribute final FiltroSemesterDTO filtroSemesterDTO) {
         List<SemesterDTO> semestersDTO = new ArrayList<>();
+
+        System.out.println(filtroSemesterDTO);
         List<Semester> semesters = semesterService.getSemestersByFiltro(filtroSemesterDTO);
         if(semesters.size() > 0){
             for (Semester g:

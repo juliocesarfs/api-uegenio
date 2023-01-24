@@ -32,6 +32,12 @@ public class SemesterRepositoryImpl implements SemesterRepositoryCustom {
             parametros.put("nome", filtroSemesterDTO.getNome());
         }
 
+        if (filtroSemesterDTO.getDate()!=null) {
+            jpql.append(" AND semester.initDate <= :date ");
+            jpql.append(" AND semester.finalDate >= :date ");
+            parametros.put("date", filtroSemesterDTO.getDate());
+        }
+
         TypedQuery<Semester> query = entityManager.createQuery(jpql.toString(), Semester.class);
         parametros.entrySet().forEach(parametro -> query.setParameter(parametro.getKey(), parametro.getValue()));
         return query.getResultList();

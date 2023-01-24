@@ -140,7 +140,7 @@ public class SubjectService {
         Long count = subjectRepository.countByNomeAndNotId(subject.getNome(), subject.getId());
 
         if (count > BigDecimal.ZERO.longValue()) {
-            throw new BusinessException(SistemaMessageCode.ERRO_TIPO_AMIGO_DUPLICADO);
+            throw new BusinessException(SistemaMessageCode.ERRO_DISCIPLINA_DUPLICADO);
         }
     }
 

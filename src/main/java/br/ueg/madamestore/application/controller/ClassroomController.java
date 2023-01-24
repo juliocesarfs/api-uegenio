@@ -18,10 +18,8 @@ import br.ueg.madamestore.application.mapper.EsperaMapper;
 import br.ueg.madamestore.application.mapper.UsuarioMapper;
 import br.ueg.madamestore.application.mapper.ClassroomMapper;
 import br.ueg.madamestore.application.mapper.VendidoMapper;
-import br.ueg.madamestore.application.model.Amigo;
-import br.ueg.madamestore.application.model.Teacher;
-import br.ueg.madamestore.application.model.Usuario;
-import br.ueg.madamestore.application.model.Classroom;
+import br.ueg.madamestore.application.model.*;
+import br.ueg.madamestore.application.service.StudentsClassroomsService;
 import br.ueg.madamestore.application.service.UsuarioService;
 import br.ueg.madamestore.application.service.ClassroomService;
 import br.ueg.madamestore.comum.exception.MessageResponse;
@@ -37,6 +35,7 @@ import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Classe de controle referente a entidade {@link Classroom}.
@@ -50,6 +49,9 @@ public class ClassroomController extends AbstractController {
 
     @Autowired
     private ClassroomService classroomService;
+
+    @Autowired
+    private StudentsClassroomsService studentsClassroomsService;
 
     @Autowired
     private ClassroomMapper classroomMapper;
@@ -97,9 +99,17 @@ public class ClassroomController extends AbstractController {
     @PutMapping(path = "/{id:[\\d]+}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> alterar(@ApiParam(value = "Código do Usuário", required = true) @PathVariable final BigDecimal id, @ApiParam(value = "Informações de classroom", required = true) @Valid @RequestBody ClassroomDTO classroomDTO) {
         Validation.max("id", id, 99999999L);
+
         Classroom classroom = classroomMapper.toEntity(classroomDTO);
         classroomService.configurarClassroomTeacher(classroom);
+        classroomService.configurarClassroomHours(classroom);
+
         classroom.setId(id.longValue());
+
+        Set<StudentsClassrooms> studentsClassroomsList = studentsClassroomsService.getByIdClassroom(classroom.getId());
+
+        classroom.setStudentsClassrooms(studentsClassroomsList);
+
         //classroomService.retiraClassroomAlterarQuantidade(classroom);
         //classroomService.diminuirQuantidadeVendida(classroom);
         classroomService.salvar(classroom);
@@ -265,6 +275,12 @@ public class ClassroomController extends AbstractController {
     public ResponseEntity<?> remover(@ApiParam(value = "Id da classroom", required = true) @PathVariable final BigDecimal id) {
         Validation.max("id", id, 99999999L);
 
+        Set<StudentsClassrooms> studentsClassroomsList = studentsClassroomsService.getByIdClassroom(id.longValue());
+
+        for (StudentsClassrooms sc : studentsClassroomsList) {
+            studentsClassroomsService.remover(sc);
+        }
+
         Classroom classroom = classroomService.remover(id.longValue());
 
         return ResponseEntity.ok(classroomMapper.toDTO(classroom));
@@ -282,7 +298,10 @@ public class ClassroomController extends AbstractController {
     public ResponseEntity<?> incluirClassroom(@ApiParam(value = "Informações da Classroom", required = true) @Valid @RequestBody ClassroomDTO classroomDTO) {
 
 
-        Classroom classroom=classroomMapper.toEntity(classroomDTO);
+        System.out.println("sadfasdasdasdasd=================================asdasdasdasd");
+        System.out.println(classroomDTO);
+        Classroom classroom = classroomMapper.toEntity(classroomDTO);
+        System.out.println(classroom);
 
 
         //classroomService.configurarClassroomTeacher(classroom);

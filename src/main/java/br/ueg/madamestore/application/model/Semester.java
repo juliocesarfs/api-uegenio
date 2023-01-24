@@ -7,8 +7,8 @@ import javax.persistence.*;
 
 import br.ueg.madamestore.application.configuration.Constante;
 
-import java.sql.Date;
 import java.time.Year;
+import java.util.Date;
 import java.util.Set;
 
 
@@ -30,9 +30,11 @@ class Semester {
     private Year ano;
 
     @Column(name = "DATA_INICIO",nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date initDate;
 
     @Column(name = "DATA_FINAL",nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date finalDate;
 
     /*

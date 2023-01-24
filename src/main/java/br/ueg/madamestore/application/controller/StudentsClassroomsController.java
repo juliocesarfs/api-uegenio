@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Classe de controle referente a entidade {@link StudentsClassrooms}.
@@ -48,6 +50,9 @@ public class StudentsClassroomsController extends AbstractController {
 
     @Autowired
     private StudentsClassroomsMapper studentsClassroomsMapper;
+
+    @Autowired
+    private ClassroomMapper classroomMapper;
 
 
 
@@ -101,5 +106,34 @@ public class StudentsClassroomsController extends AbstractController {
         studentsClassroomsService.remover(studentsClassrooms);
 
         return ResponseEntity.ok(studentsClassroomsDTO);
+    }
+
+    @ApiOperation(value = "Recupera os classrooms pelo Filtro Informado.", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Success", response = ClassroomDTO.class),
+            @ApiResponse(code = 400, message = "Bad Request", response = MessageResponse.class),
+            @ApiResponse(code = 404, message = "Not Found", response = MessageResponse.class)
+    })
+    @GetMapping(path = "/filtro", produces = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<?> getClassroomByFiltro(@ApiParam(value = "Filtro de pesquisa", required = true) @Valid @ModelAttribute("filtroDTO") final FiltroStudentsClassroomsDTO filtroDTO) {
+        System.out.println("=============================================asdasdasdasdasdasdasdasdasdasdasd");
+
+        System.out.println(filtroDTO);
+
+        List<Classroom> classrooms = studentsClassroomsService.getClassroomByFiltro(filtroDTO);
+
+
+        List<ClassroomDTO> classroomsDTO = new ArrayList<>();
+        if(classrooms.size() > 0){
+            for (Classroom g:
+
+                    classrooms) {
+                ClassroomDTO classroomDTO = classroomMapper.toDTO(g);
+                classroomsDTO.add(classroomDTO);
+            }
+        }
+
+        return ResponseEntity.ok(classroomsDTO);
+
     }
 }

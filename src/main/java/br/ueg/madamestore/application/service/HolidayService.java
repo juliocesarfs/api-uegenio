@@ -56,6 +56,10 @@ public class HolidayService {
             vazio = Boolean.FALSE;
         }
 
+        if (filtroDTO.getDate()!=null) {
+            vazio = Boolean.FALSE;
+        }
+
         if (vazio) {
             throw new BusinessException(SistemaMessageCode.ERRO_FILTRO_INFORMAR_OUTRO);
         }
@@ -140,7 +144,7 @@ public class HolidayService {
         Long count = holidayRepository.countByNomeAndNotId(holiday.getNome(), holiday.getId());
 
         if (count > BigDecimal.ZERO.longValue()) {
-            throw new BusinessException(SistemaMessageCode.ERRO_TIPO_AMIGO_DUPLICADO);
+            throw new BusinessException(SistemaMessageCode.ERRO_FERIADO_DUPLICADO);
         }
     }
 

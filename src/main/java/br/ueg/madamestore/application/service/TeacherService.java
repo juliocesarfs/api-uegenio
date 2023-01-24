@@ -149,7 +149,7 @@ public class TeacherService {
         Long count = teachersRepository.countByNomeAndNotId(teacher.getNome(), teacher.getId());
 
         if (count > BigDecimal.ZERO.longValue()) {
-            throw new BusinessException(SistemaMessageCode.ERRO_AMIGO_DUPLICADO);
+            throw new BusinessException(SistemaMessageCode.ERRO_PROFESSOR_DUPLICADO);
         }
     }
 

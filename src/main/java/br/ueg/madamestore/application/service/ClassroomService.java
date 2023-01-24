@@ -73,6 +73,8 @@ public class ClassroomService {
 
 
         configurarClassroomTeacher(classroom);
+        configurarClassroomHours(classroom);
+
         //validaTotalQuantidade(classroom);
         buscarTeacher(classroom);
         buscarSemester(classroom);
@@ -132,9 +134,15 @@ public class ClassroomService {
 
     }
 
+    public void configurarClassroomHours(Classroom classroom) {
+        for (Hour hour : classroom.getHours()){
+            hour.setClassroom(classroom);
+        }
+    }
+
     public void configurarStudentClassroom(Classroom classroom) {
-        for (TeachersClassrooms teachersClassrooms : classroom.getTeachersClassrooms()){
-            teachersClassrooms.setClassroom(classroom);
+        for (StudentsClassrooms studentsClassrooms : classroom.getStudentsClassrooms()){
+            studentsClassrooms.setClassroom(classroom);
         }
 
     }
@@ -160,6 +168,9 @@ public class ClassroomService {
             invalido = Boolean.TRUE;
 
         if (classroom.getLocal() == null)
+            invalido = Boolean.TRUE;
+
+        if (classroom.getHours() == null)
             invalido = Boolean.TRUE;
 
 
@@ -195,6 +206,7 @@ public class ClassroomService {
         Classroom classroom = this.getById(id);
 
         configurarClassroomTeacher(classroom);
+
         buscarTeacher(classroom);
         buscarSemester(classroom);
         buscarSubject(classroom);
@@ -228,8 +240,9 @@ public class ClassroomService {
             vazio = Boolean.FALSE;
         }
 
-
-
+        if (filtroDTO.getLocal()!=null) {
+            vazio = Boolean.FALSE;
+        }
 
 
         if (vazio) {
