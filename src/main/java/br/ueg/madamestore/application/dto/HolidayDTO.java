@@ -20,6 +20,9 @@ class HolidayDTO implements Serializable {
     @ApiModelProperty(value = "id da feriado")
     private Long id;
 
+    @ApiModelProperty(value = "id da feriado")
+    private Long idSemester;
+
     @ApiModelProperty(value = "Nome da feriado")
     private String nome;
 

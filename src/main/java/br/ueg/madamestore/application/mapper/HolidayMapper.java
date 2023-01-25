@@ -12,7 +12,7 @@ import org.mapstruct.Mapping;
  *
  * @author UEG
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = { SemesterMapper.class })
 public interface HolidayMapper {
     /**
      * Converte a entidade {@link Holiday} em DTO {@link HolidayDTO}
@@ -21,6 +21,7 @@ public interface HolidayMapper {
      * @return
      */
 
+    @Mapping(source = "semester.id", target = "idSemester")
     public HolidayDTO toDTO(Holiday holiday);
 
     /**
@@ -30,5 +31,6 @@ public interface HolidayMapper {
      * @return
      */
 
+    @Mapping(source = "holidayDTO.idSemester", target = "semester.id")
     public Holiday toEntity(HolidayDTO holidayDTO);
 }
