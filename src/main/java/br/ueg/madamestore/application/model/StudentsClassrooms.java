@@ -16,7 +16,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "TBL_STUDENTS_CLASSROOMS", schema = Constante.DATABASE_OWNER)
+@Table(name = "TBL_STUDENTS_CLASSROOMS", schema = Constante.DATABASE_OWNER, uniqueConstraints={
+        @UniqueConstraint(columnNames = {"id_classroom", "id_student"})
+})
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor

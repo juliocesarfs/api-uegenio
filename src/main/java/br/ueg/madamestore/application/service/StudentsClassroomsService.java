@@ -7,10 +7,7 @@ import br.ueg.madamestore.application.dto.NotaDTO;
 import br.ueg.madamestore.application.enums.StatusEspera;
 import br.ueg.madamestore.application.enums.StatusVendido;
 import br.ueg.madamestore.application.exception.SistemaMessageCode;
-import br.ueg.madamestore.application.model.Classroom;
-import br.ueg.madamestore.application.model.Student;
-import br.ueg.madamestore.application.model.StudentsClassrooms;
-import br.ueg.madamestore.application.model.Venda;
+import br.ueg.madamestore.application.model.*;
 import br.ueg.madamestore.application.repository.StudentsClassroomsRepository;
 import br.ueg.madamestore.comum.exception.BusinessException;
 import br.ueg.madamestore.comum.util.CollectionUtil;
@@ -19,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -166,10 +164,20 @@ public class StudentsClassroomsService {
 
         public StudentsClassrooms salvar(StudentsClassrooms studentsClassrooms) {
 
-
+        //validarDuplicidade(studentsClassrooms);
         studentsClassrooms = studentsClassroomsRepository.save(studentsClassrooms);
         studentsClassrooms = studentsClassroomsRepository.findByIdFetch(studentsClassrooms.getId().longValue()).get();
         return studentsClassrooms;
+    }
+
+    private void validarDuplicidade(final StudentsClassrooms studentsClassrooms) {
+        StudentsClassrooms stdC = studentsClassroomsRepository.findByIdClassroomAndIdStudent(studentsClassrooms.getClassroom().getId(), studentsClassrooms.getStudent().getId());
+
+        System.out.println("asdasdasdasdasdasdasd=======================asdasasdasd=================");
+        System.out.println(stdC);
+        if (stdC.getId()!=null) {
+            throw new BusinessException(SistemaMessageCode.ERRO_VINCULACAO_DUPLICADO);
+        }
     }
 
     public List<Classroom> getClassroomByFiltro(FiltroStudentsClassroomsDTO filtroDTO) {
