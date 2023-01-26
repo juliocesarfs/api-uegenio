@@ -1,6 +1,7 @@
 package br.ueg.madamestore.application.service;
 
 
+import br.ueg.madamestore.application.model.*;
 import br.ueg.madamestore.application.repository.SemesterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.ueg.madamestore.application.dto.FiltroSemesterDTO;
 import br.ueg.madamestore.application.exception.SistemaMessageCode;
-import br.ueg.madamestore.application.model.Semester;
 import br.ueg.madamestore.comum.exception.BusinessException;
 import br.ueg.madamestore.comum.util.CollectionUtil;
 import br.ueg.madamestore.comum.util.Util;
@@ -102,10 +102,18 @@ public class SemesterService {
      */
     public Semester salvar(Semester semester) {
         validarCamposObrigatorios(semester);
+
         validarDuplicidade(semester);
 
         Semester grupoSaved = semesterRepository.save(semester);
         return grupoSaved;
+    }
+
+    public void buscarHolidays(Semester semester) {
+
+        Semester semester1 = semesterRepository.getOne(semester.getId());
+
+        semester.setHolidays(semester1.getHolidays());
     }
 
     public Semester remover(Long id){

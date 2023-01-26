@@ -68,6 +68,7 @@ public class SemesterController extends AbstractController {
         Validation.max("id", id, 99999999L);
         Semester semester = semesterMapper.toEntity(semesterDTO);
         semester.setId(id.longValue());
+        semesterService.buscarHolidays(semester);
         Semester semesterSaved = semesterService.salvar(semester);
         return ResponseEntity.ok(semesterMapper.toDTO(semesterSaved));
     }

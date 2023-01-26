@@ -130,8 +130,6 @@ public class ClassroomService {
         for (TeachersClassrooms teachersClassrooms : classroom.getTeachersClassrooms()){
             teachersClassrooms.setClassroom(classroom);
         }
-
-
     }
 
     public void configurarClassroomHours(Classroom classroom) {
