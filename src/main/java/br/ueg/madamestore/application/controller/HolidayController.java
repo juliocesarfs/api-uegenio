@@ -107,6 +107,8 @@ public class HolidayController extends AbstractController {
     @GetMapping(path = "/filtro", produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<?> getAllByFiltro(@ApiParam(value = "Filtro de pesquisa", required = true) @ModelAttribute final FiltroHolidayDTO filtroHolidayDTO) {
         List<HolidayDTO> holidaysDTO = new ArrayList<>();
+        System.out.println("sdasdasdasd");
+        System.out.println(filtroHolidayDTO.getDate());
         List<Holiday> holidays = holidayService.getHolidaysByFiltro(filtroHolidayDTO);
         if(holidays.size() > 0){
             for (Holiday g:
