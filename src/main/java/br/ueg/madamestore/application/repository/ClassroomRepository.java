@@ -66,5 +66,11 @@ public interface ClassroomRepository extends JpaRepository<Classroom, Long>, Cla
             "where ug.classroom.id=:idClassroom")
     List<Student> findByIdClassroom(Long idClassroom);
 
+    @Query("SELECT COUNT(classroom) FROM Classroom classroom " +
+            " INNER JOIN classroom.subject subject "+
+            " WHERE subject.nome = :nomeSubject" +
+            " AND (:idClassroom IS NULL OR classroom.id != :idClassroom)")
+    public Long countBySubjectAndNotId(String nomeSubject, Long idClassroom);
+
 
 }
