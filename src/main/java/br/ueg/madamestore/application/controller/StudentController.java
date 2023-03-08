@@ -75,10 +75,6 @@ public class StudentController extends AbstractController {
     public ResponseEntity<?> incluir(@ApiParam(value = "Informações da Student", required = true) @Valid @RequestBody StudentDTO studentDTO) {
         Student student = studentMapper.toEntity(studentDTO);
 
-        System.out.println("=================================================asdasdasdasddasd");
-        System.out.println(studentDTO);
-        System.out.println("=================================================asdasdasdasddasd");
-        System.out.println(student);
         //studentService.configurarStudentTeacher(student);
 
         student = studentService.salvar(student);
@@ -125,7 +121,6 @@ public class StudentController extends AbstractController {
     })
     @GetMapping(path = "/", produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<?> getStudentByAlexaId(@ApiParam(value = "Id do Classroom")@RequestBody StudentDTO studentDTO) {
-        System.out.println("-========================================================asdasdasdasdasdasd");
         System.out.println(studentDTO.getAlexaID());
 
         Student student = studentService.getByAlexaID(studentDTO.getAlexaID());
