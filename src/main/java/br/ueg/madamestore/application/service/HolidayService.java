@@ -85,7 +85,7 @@ public class HolidayService {
      * @return
      */
     public Holiday getById(Long id){
-        Optional<Holiday> holidayOptional = holidayRepository.findById(id);
+        Optional<Holiday> holidayOptional = Optional.of(holidayRepository.findById(id).get());
 
         if(!holidayOptional.isPresent()){
             throw new BusinessException(SistemaMessageCode.ERRO_NENHUM_REGISTRO_ENCONTRADO);

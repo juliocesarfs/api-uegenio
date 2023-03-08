@@ -40,6 +40,12 @@ public interface StudentsClassroomsRepository extends JpaRepository<StudentsClas
             " AND classroom.subject.nome = :subjectName")
     public StudentsClassrooms findByIdStudentAndSubjectName(@Param("idStudent") Long idStudent, @Param("subjectName") String subjectName);
 
+    @Query("SELECT COUNT(studentsClassrooms) FROM StudentsClassrooms studentsClassrooms " +
+            " WHERE studentsClassrooms.student.id = :idStudent" +
+            " AND studentsClassrooms.classroom.id = :idClassroom "
+            )
+    public Long countByIdStudentAndIdClassroom(@Param("idStudent") Long idStudent, @Param("idClassroom") Long idClassroom);
+
 
 }
 

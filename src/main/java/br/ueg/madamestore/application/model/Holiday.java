@@ -1,5 +1,6 @@
 package br.ueg.madamestore.application.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -30,5 +31,11 @@ class Holiday {
 
     @Column(name = "DATA_FINAL",nullable = false)
     private Date finalDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ID_SEMESTER", referencedColumnName = "id", nullable = false)
+    @ToStringExclude
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Semester semester;
 
 }

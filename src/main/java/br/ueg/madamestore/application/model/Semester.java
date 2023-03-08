@@ -37,9 +37,8 @@ class Semester {
     @Temporal(TemporalType.DATE)
     private Date finalDate;
 
-    /*
+
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "semester", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Holiday> holidays;
-     */
 }

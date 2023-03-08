@@ -25,7 +25,7 @@ public class SolicitationFrequency implements SolicitationInterface {
             if (parameter.getName().equals("userId")) {
                 this.userId = parameter.getValue();
             }
-            if (parameter.getName().equals("subject")) {
+            if (parameter.getName().equals("disciplina")) {
                 this.subject = parameter.getValue();
             }
         }

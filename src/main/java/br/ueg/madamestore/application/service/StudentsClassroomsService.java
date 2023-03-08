@@ -7,10 +7,7 @@ import br.ueg.madamestore.application.dto.NotaDTO;
 import br.ueg.madamestore.application.enums.StatusEspera;
 import br.ueg.madamestore.application.enums.StatusVendido;
 import br.ueg.madamestore.application.exception.SistemaMessageCode;
-import br.ueg.madamestore.application.model.Classroom;
-import br.ueg.madamestore.application.model.Student;
-import br.ueg.madamestore.application.model.StudentsClassrooms;
-import br.ueg.madamestore.application.model.Venda;
+import br.ueg.madamestore.application.model.*;
 import br.ueg.madamestore.application.repository.StudentsClassroomsRepository;
 import br.ueg.madamestore.comum.exception.BusinessException;
 import br.ueg.madamestore.comum.util.CollectionUtil;
@@ -19,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -52,8 +50,8 @@ public class StudentsClassroomsService {
         notaDTO2.setIdStudent(1L);
         notaDTO2.setSubject("Tópicos avançados em análise de dados");
         notaDTO2.setNota_1va(7.9);
-        notaDTO2.setNota_2va(6.0);
-        notaDTO2.setMedia_final(((notaDTO2.getNota_1va()*2)+(notaDTO2.getNota_2va()*3))/5);
+        notaDTO2.setNota_2va(null);
+        notaDTO2.setMedia_final(null);
 
 
         notaDTOList.add(notaDTO2);
@@ -61,9 +59,9 @@ public class StudentsClassroomsService {
         NotaDTO notaDTO3 = new NotaDTO();
         notaDTO3.setIdStudent(1L);
         notaDTO3.setSubject("Contabilidade, Economia e Finanças");
-        notaDTO3.setNota_1va(9.9);
-        notaDTO3.setNota_2va(7.0);
-        notaDTO3.setMedia_final(((notaDTO3.getNota_1va()*2)+(notaDTO3.getNota_2va()*3))/5);
+        notaDTO3.setNota_1va(null);
+        notaDTO3.setNota_2va(null);
+        notaDTO3.setMedia_final(null);
 
         notaDTOList.add(notaDTO3);
 
@@ -166,10 +164,20 @@ public class StudentsClassroomsService {
 
         public StudentsClassrooms salvar(StudentsClassrooms studentsClassrooms) {
 
-
+        //validarDuplicidade(studentsClassrooms);
         studentsClassrooms = studentsClassroomsRepository.save(studentsClassrooms);
         studentsClassrooms = studentsClassroomsRepository.findByIdFetch(studentsClassrooms.getId().longValue()).get();
         return studentsClassrooms;
+    }
+
+    private void validarDuplicidade(final StudentsClassrooms studentsClassrooms) {
+        StudentsClassrooms stdC = studentsClassroomsRepository.findByIdClassroomAndIdStudent(studentsClassrooms.getClassroom().getId(), studentsClassrooms.getStudent().getId());
+
+        System.out.println("asdasdasdasdasdasdasd=======================asdasasdasd=================");
+        System.out.println(stdC);
+        if (stdC.getId()!=null) {
+            throw new BusinessException(SistemaMessageCode.ERRO_VINCULACAO_DUPLICADO);
+        }
     }
 
     public List<Classroom> getClassroomByFiltro(FiltroStudentsClassroomsDTO filtroDTO) {

@@ -75,6 +75,8 @@ public class ClassroomService {
         configurarClassroomTeacher(classroom);
         configurarClassroomHours(classroom);
 
+        validarDuplicidade(classroom);
+
         //validaTotalQuantidade(classroom);
         buscarTeacher(classroom);
         buscarSemester(classroom);
@@ -83,6 +85,14 @@ public class ClassroomService {
         classroom= classroomRepository.save(classroom);
         classroom = classroomRepository.findByIdFetch(classroom.getId()).get();
         return classroom;
+    }
+
+    private void validarDuplicidade(final Classroom classroom) {
+        Long count = classroomRepository.countBySubjectAndNotId(classroom.getSubject().getNome(), classroom.getId());
+
+        if (count > BigDecimal.ZERO.longValue()) {
+            throw new BusinessException(SistemaMessageCode.ERRO_DISCIPLINA_DUPLICADO);
+        }
     }
 
 
@@ -130,8 +140,6 @@ public class ClassroomService {
         for (TeachersClassrooms teachersClassrooms : classroom.getTeachersClassrooms()){
             teachersClassrooms.setClassroom(classroom);
         }
-
-
     }
 
     public void configurarClassroomHours(Classroom classroom) {
